@@ -6,4 +6,5 @@ When /^I touch the Add Timestamp button$/ do
 end
 
 Then /^I see timestamp$/ do
- expect(
+  check_element_exists("tableLayout placeholder:'mytable'")
+end
