@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     }
     public void getRowWithCurrentTimeStamp()
     {
+        //set text for each column of the table layout
         tl = (TableLayout) findViewById(R.id.mytable);
         title = new EditText(this);
         timeStamp = new TextView(this);
@@ -94,10 +95,12 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     }
     public void addRowToTable()
     {
+        // Add each field to the table layout
         tr.addView(title);
         tr.addView(timeStamp);
         tl.addView(tr, new TableLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
         tr = new TableRow(this);
+        //Add each entry to an array list to save all the dynamic fields created
         allTitles.add(title);
         allTs.add(timeStamp);
         epochList.add(currentTime);
@@ -159,12 +162,9 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
       switch (v.getId()) {
             case R.id.btn_2:
-                //set text for each column of the table layout
                 getRowWithCurrentTimeStamp();
                 timeStamp.setText(showTime);
                 title.setText(step);
-                // Add each field to the table layout
-                //Add each entry to an array list to save all the dynamic fields created
                 addRowToTable();
             break;
             case R.id.btn_3:
