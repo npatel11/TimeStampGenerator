@@ -43,9 +43,9 @@ import android.widget.TableRow.LayoutParams;
 import android.widget.AdapterView.OnItemSelectedListener;
 
 public class MainActivity extends AppCompatActivity implements OnClickListener {
-    Button btn_save, btn_timestamp;
+    Button btn_save, btn_timestamp, btn_unexpected;
     int click = 0;
-    String Message,saveName, result, step = "";
+    String Message,saveName, result, step = "", showTime;
     TableLayout tl;
     TableRow tr;
     TextView timeStamp;
@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     ArrayList<String> lines;
     File protocolFile;
     Path FilePath = null;
+    long currentTime;
 
     List<EditText> allTitles = new ArrayList<EditText>();
     List<TextView> allTs = new ArrayList<TextView>();
@@ -70,6 +71,8 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         btn_timestamp.setOnClickListener(this);
         btn_save = (Button) findViewById(R.id.btn_3);
         btn_save.setOnClickListener(this);
+        btn_unexpected = (Button) findViewById(R.id.button);
+        btn_unexpected.setOnClickListener(this);
         protocols = (Spinner) findViewById(R.id.spinner);
         getFilenames();
     }
@@ -89,9 +92,32 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         protocols.setAdapter(adapter);
     }
 
-    public void getFileNames()
+    public void getRowWithCurrentTimeStamp()
     {
+        tl = (TableLayout) findViewById(R.id.mytable);
+        title = new EditText(this);
+        timeStamp = new TextView(this);
+        tr = new TableRow(this);
+        tr.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
+        //Getting currentTime in Unix
+        currentTime=System.currentTimeMillis();
 
+        //converting it in to user readable format
+        Calendar cal=Calendar.getInstance();
+        cal.setTimeInMillis(currentTime);
+        showTime=String.format("%1$tm/%1$td/%1$tY %1$tI:%1$tM:%1$tS%1$Tp", cal);//shows time in format 10:30:45am
+
+    }
+
+    public void addRowToTable()
+    {
+        tr.addView(title);
+        tr.addView(timeStamp);
+        tl.addView(tr, new TableLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
+        tr = new TableRow(this);
+        allTitles.add(title);
+        allTs.add(timeStamp);
+        epochList.add(currentTime);
     }
 
     private OutputStreamWriter createFile(String fileName) throws IOException
@@ -138,36 +164,15 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
       switch (v.getId()) {
             case R.id.btn_2:
-
-                tl = (TableLayout) findViewById(R.id.mytable);
-                title = new EditText(this);
-                timeStamp = new TextView(this);
-                tr = new TableRow(this);
-                tr.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
-
-                //Getting currentTime in Unix
-                long currentTime=System.currentTimeMillis();
-
-                //converting it in to user readable format
-                Calendar cal=Calendar.getInstance();
-                cal.setTimeInMillis(currentTime);
-                String showTime=String.format("%1$tm/%1$td/%1$tY %1$tI:%1$tM:%1$tS%1$Tp", cal);//shows time in format 10:30:45am
-
-                 //set text for each column of the table layout
+                //set text for each column of the table layout
+                getRowWithCurrentTimeStamp();
 
                 timeStamp.setText(showTime);
                 title.setText(step);
 
                 // Add each field to the table layout
-                tr.addView(title);
-                tr.addView(timeStamp);
-                tl.addView(tr, new TableLayout.LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.WRAP_CONTENT));
-                tr = new TableRow(this);
-
                 //Add each entry to an array list to save all the dynamic fields created
-                allTitles.add(title);
-                allTs.add(timeStamp);
-                epochList.add(currentTime);
+                addRowToTable();
             break;
             case R.id.btn_3:
                try {
@@ -178,12 +183,19 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                         osw.write(allTitles.get(i).getText() + "," + epochList.get(i).toString() + "\n");
                         osw.flush();
                         Toast.makeText(getBaseContext(), "File Created", Toast.LENGTH_LONG).show();
+
                     }
                }catch (IOException e)
                 {
                 e.printStackTrace();
                 }
             break;
+          case R.id.button:
+              getRowWithCurrentTimeStamp();
+              timeStamp.setText(showTime);
+              title.setText("Enter custom step");
+              addRowToTable();
+              break;
 
         }
     }

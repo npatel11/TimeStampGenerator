@@ -1,7 +1,7 @@
 require 'calabash-android/calabash_steps'
 
 When /^I touch the Add Timestamp button$/ do
- btn_txt = 'Timestamp'
+ btn_txt = 'btn_timestamp'
  touch("button text:#{btn_txt}")
 end
 

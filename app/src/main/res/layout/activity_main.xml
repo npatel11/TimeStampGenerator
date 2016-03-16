@@ -53,11 +53,12 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/linearLayout"
-        android:weightSum="1">
+        android:weightSum="1"
+        android:id="@+id/linearLayout2">
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="378dp"
             android:id="@+id/scrollView">
 
             <TableLayout
@@ -72,6 +73,19 @@
                     android:stretchColumns="0,1"></TableLayout>
             </TableLayout>
         </ScrollView>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal">
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Unexpected Event"
+                android:id="@+id/button" />
+        </LinearLayout>
     </LinearLayout>
 
 
