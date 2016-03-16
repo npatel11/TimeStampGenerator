@@ -16,7 +16,8 @@
         android:id="@+id/linearLayout"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:weightSum="1">
 
         <Spinner
 
@@ -24,24 +25,10 @@
             android:ellipsize="marquee"
             android:textSize="18sp"
             android:textColor="#808080"
-            android:layout_width="109dp"
+            android:layout_width="match_parent"
             android:layout_height="35dp"
             android:id="@+id/spinner"
             android:focusableInTouchMode="true" />
-
-        <Button
-            android:id="@+id/btn_2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="TimeStamp"/>
-
-        <Button
-            android:id="@+id/btn_3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Save"/>
 
 
     </LinearLayout>
@@ -81,7 +68,21 @@
             android:layout_gravity="center_horizontal">
 
             <Button
-                android:layout_width="match_parent"
+                android:id="@+id/btn_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Save"/>
+
+            <Button
+                android:id="@+id/btn_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="TimeStamp"/>
+
+            <Button
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Unexpected Event"
                 android:id="@+id/button" />
