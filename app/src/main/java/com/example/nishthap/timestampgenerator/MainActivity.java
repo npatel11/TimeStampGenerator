@@ -76,22 +76,6 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         protocols = (Spinner) findViewById(R.id.spinner);
         getFilenames();
     }
-
-    public void getFilenames() {
-        String protocolDirName="Protocols_List";
-        File directory = new File(android.os.Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),protocolDirName);
-        File fileList[] = directory.listFiles();
-        String[] list = new String[fileList.length];
-        String[] spinnerList = new String[fileList.length];
-        for(int i=0; i < fileList.length; i++)
-        {
-            list[i]=fileList[i].getAbsolutePath().toString();
-            spinnerList[i]=list[i].substring(list[i].lastIndexOf("/")+1);
-        }
-        ArrayAdapter<String> adapter=new ArrayAdapter<String> (this,android.R.layout.simple_spinner_item,spinnerList);
-        protocols.setAdapter(adapter);
-    }
-
     public void getRowWithCurrentTimeStamp()
     {
         tl = (TableLayout) findViewById(R.id.mytable);
@@ -108,7 +92,6 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         showTime=String.format("%1$tm/%1$td/%1$tY %1$tI:%1$tM:%1$tS%1$Tp", cal);//shows time in format 10:30:45am
 
     }
-
     public void addRowToTable()
     {
         tr.addView(title);
@@ -119,7 +102,20 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         allTs.add(timeStamp);
         epochList.add(currentTime);
     }
-
+    public void getFilenames() {
+        String protocolDirName="Protocols_List";
+        File directory = new File(android.os.Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),protocolDirName);
+        File fileList[] = directory.listFiles();
+        String[] list = new String[fileList.length];
+        String[] spinnerList = new String[fileList.length];
+        for(int i=0; i < fileList.length; i++)
+        {
+            list[i]=fileList[i].getAbsolutePath().toString();
+            spinnerList[i]=list[i].substring(list[i].lastIndexOf("/")+1);
+        }
+        ArrayAdapter<String> adapter=new ArrayAdapter<String> (this,android.R.layout.simple_spinner_item,spinnerList);
+        protocols.setAdapter(adapter);
+    }
     private OutputStreamWriter createFile(String fileName) throws IOException
     {
         String dirName = " Data_Collection_TimeStamp";
@@ -132,7 +128,6 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         FileOutputStream fOut = new FileOutputStream(file);
         return new OutputStreamWriter(fOut);
     }
-
     @Override
     public void onClick(View v) {
         int id = 0;
@@ -166,10 +161,8 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
             case R.id.btn_2:
                 //set text for each column of the table layout
                 getRowWithCurrentTimeStamp();
-
                 timeStamp.setText(showTime);
                 title.setText(step);
-
                 // Add each field to the table layout
                 //Add each entry to an array list to save all the dynamic fields created
                 addRowToTable();
