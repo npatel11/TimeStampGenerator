@@ -1,15 +1,10 @@
 package com.example.nishthap.timestampgenerator;
 
-import android.content.Context;
-import android.database.Cursor;
 import android.graphics.Path;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.view.View.OnClickListener;
@@ -22,25 +17,15 @@ import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import android.widget.TableRow.LayoutParams;
-import android.widget.AdapterView.OnItemSelectedListener;
 
 public class MainActivity extends AppCompatActivity implements OnClickListener {
     Button btn_save, btn_timestamp, btn_unexpected;
@@ -58,10 +43,14 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     File protocolFile;
     Path FilePath = null;
     long currentTime;
+    BufferedReader br = null;
+    String protocolString = null;
+    File directory, outputDirectory;
 
     List<EditText> allTitles = new ArrayList<EditText>();
     List<TextView> allTs = new ArrayList<TextView>();
     List<Long> epochList = new ArrayList<Long>();
+    List<String> allSteps = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     }
     public void getFilenames() {
         String protocolDirName="Protocols_List";
-        File directory = new File(android.os.Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),protocolDirName);
+        directory = new File(android.os.Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),protocolDirName);
         File fileList[] = directory.listFiles();
         String[] list = new String[fileList.length];
         String[] spinnerList = new String[fileList.length];
@@ -122,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     private OutputStreamWriter createFile(String fileName) throws IOException
     {
         String dirName = " Data_Collection_TimeStamp";
-        File outputDirectory = new File(android.os.Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), dirName);
+        outputDirectory = new File(android.os.Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), dirName);
         if (!outputDirectory.exists()) {
             outputDirectory.mkdir();
         }
@@ -134,33 +123,23 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     @Override
     public void onClick(View v) {
         int id = 0;
-        id++;
-        lines = new ArrayList<String>();
-        BufferedReader br = null;
-        String protocolString = null;
+        getFilenames();
         protocolString = protocols.getSelectedItem().toString();
         File protocolFile = new File(protocolString);
         try {
             br = new BufferedReader(new FileReader(protocolFile));
-            String str;
-            str = null;
-            ArrayList<String> lines = new ArrayList<String>();
-           /*while((str = br.readLine()) != null){
-               lines.add(str);
-               String[] linesArray = lines.toArray(new String[lines.size()]);
-               step = linesArray[id];
-           }*/
-           while((str = br.readLine()) != null)
+            String str = null;
+            while((str = br.readLine()) != null)
             {
-                String[] linesArray = str.split(",");
+                String[] linesArray = str.split(";");
                 step = linesArray[id];
             }
             br.close();
+
         } catch (IOException e) {
             System.out.println("File Read Error");
         }
-
-      switch (v.getId()) {
+        switch (v.getId()) {
             case R.id.btn_2:
                 getRowWithCurrentTimeStamp();
                 timeStamp.setText(showTime);
